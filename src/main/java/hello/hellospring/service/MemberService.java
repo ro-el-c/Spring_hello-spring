@@ -23,18 +23,23 @@ public class MemberService {
      * 회원가입
      * */
     public Long join(Member member){
-        long start = System.currentTimeMillis();
+        // 이미 가입되어 있는 이름으로 가입 불가능 - 이름 중복 확인
+        validateDuplicateMember(member);
+        memberRepository.save(member);
+        return member.getId();
 
-        try{
-            // 이미 가입되어 있는 이름으로 가입 불가능 - 이름 중복 확인
-            validateDuplicateMember(member);
-            memberRepository.save(member);
-            return member.getId();
-        } finally{
-            long finish = System.currentTimeMillis();
-            long timeMs = finish - start;
-            System.out.println("join = " + timeMs + "ms");
-        }
+//        AOP 적용 전 time trace
+//        long start = System.currentTimeMillis();
+//
+//        try{
+//            validateDuplicateMember(member);
+//            memberRepository.save(member);
+//            return member.getId();
+//        } finally{
+//            long finish = System.currentTimeMillis();
+//            long timeMs = finish - start;
+//            System.out.println("join = " + timeMs + "ms");
+//        }
     }
 
     private void validateDuplicateMember(Member member) {
@@ -55,15 +60,19 @@ public class MemberService {
      * [전체] 회원 조회
      * */
     public List<Member> findMembers(){
-        long start = System.currentTimeMillis();
+        return memberRepository.findAll();
 
-        try{
-            return memberRepository.findAll();
-        } finally{
-            long finish = System.currentTimeMillis();
-            long timeMs = finish - start;
-            System.out.println("findMembers = " + timeMs + "ms");
-        }
+//        AOP 적용 전 time trace
+//
+//        long start = System.currentTimeMillis();
+//
+//        try{
+//            return memberRepository.findAll();
+//        } finally{
+//            long finish = System.currentTimeMillis();
+//            long timeMs = finish - start;
+//            System.out.println("findMembers = " + timeMs + "ms");
+//        }
     }
     public Optional<Member> findOne(Long memberId){
         return memberRepository.findById(memberId);
