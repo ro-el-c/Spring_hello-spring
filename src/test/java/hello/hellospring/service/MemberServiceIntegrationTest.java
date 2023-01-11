@@ -5,18 +5,20 @@ import hello.hellospring.repository.MemberRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Commit;
 import org.springframework.transaction.annotation.Transactional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
-@Transactional
+@Transactional // 데이터 롤백 -> 데이터가 다음 테스트에 영향 주지 않도록
 class MemberServiceIntegrationTest {
     @Autowired MemberService memberService;
     @Autowired MemberRepository memberRepository;
 
     @Test
+    // @Commit // DB에 반영
     public void 회원가입() throws Exception {
         //Given
         Member member = new Member();
@@ -34,9 +36,9 @@ class MemberServiceIntegrationTest {
     public void 중복_회원_예외() throws Exception {
         //Given
         Member member1 = new Member();
-        member1.setName("spring");
+        member1.setName("springTest");
         Member member2 = new Member();
-        member2.setName("spring");
+        member2.setName("springTest");
 
         //When
         memberService.join(member1);
